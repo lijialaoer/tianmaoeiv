@@ -1,119 +1,177 @@
 /*
 * @Author: lenovo
-* @Date:   2017-09-18 17:33:31
+* @Date:   2017-09-24 18:06:34
 * @Last Modified by:   lenovo
-* @Last Modified time: 2017-09-19 23:23:36
+* @Last Modified time: 2017-09-30 17:39:39
 */
 window.onload=function(){
-	let w=document.getElementsByClassName('word')[0];
-	let lis=w.getElementsByTagName('li');
-	let it=document.getElementsByClassName('item');
-	for(let i=0;i<lis.length;i++){
-		lis[i].onmouseover=function(){
-			it[i].style.display='block';
-		}
-		lis[i].onmouseout=function(){
-			it[i].style.display='none';
-		}
-		
-	}
-
-	let hitem1=gets('.hitem1')[0];
-	let hitem2=gets('.hitem2')[0];
-	let hitem3=gets('.hitem3')[0];
-	let hitem4=gets('.hitem4')[0];
-	let hitem5=gets('.hitem5')[0];
-
-	let hbox1=gets('.header-right-box1')[0];
-	let hbox2=gets('.header-right-box7')[0];
-	let hbox3=gets('.header-right-box5')[2];
-	let hbox4=gets('.header-right-box2')[2];
-	let hbox5=gets('.header-right-box11')[0];
-	console.log(hbox5)
-
-	hbox1.onmouseover=function(){
-		hitem1.style.height='50px';
-	}
-	hbox1.onmouseout=function(){
-		hitem1.style.height=0;
-	}
-
-	hbox2.onmouseover=function(){
-		hitem2.style.height='50px';
-	}
-	hbox2.onmouseout=function(){
-		hitem2.style.height=0;
-	}
-
-	hbox3.onmouseover=function(){
-		hitem3.style.display='block';
-	}
-	hbox3.onmouseout=function(){
-		hitem3.style.display='none';
-	}
-
-	hbox4.onmouseover=function(){
-		hitem4.style.display='block';
-	}
-	hbox4.onmouseout=function(){
-		hitem4.style.display='none';
-	}
-
-	hbox5.onmouseover=function(){
-		hitem5.style.display='block';
-	}
-	hbox5.onmouseout=function(){
-		hitem5.style.display='none';
-	}
-
-
-	let box=document.getElementsByClassName('banner-list')[0];
-	let blist=document.getElementsByClassName('bar-list')[0];
-	let circle=blist.getElementsByTagName('li');
-	console.log(circle)
-	let blis=box.getElementsByClassName('banner-img');
-	
-	console.log(blis)
-	let n=0
-	circle[0].style.background='#fff';
-	blis[0].style.display='block';
-	for(let i=0;i<blis.length;i++){
-		circle[i].onclick=function(){
-			circle[n].style.background='#a2a2a2';
-			circle[i].style.background='#fff';
-			blis[n].style.display='none';
-			blis[i].style.display='block';
-			n=i;
-		}
-	}
-
-
-
-
-	let t=setInterval(run, 1000);
-
-	box.onmouseover=function(){
+	let banner=document.querySelector('.banner');
+	let babody=document.querySelector('.banner-body');
+	let bali=babody.querySelectorAll('li');
+	let circle=document.querySelector('.banner-circle');
+	let cirli=circle.querySelectorAll('li');
+	let bancolor=['#E8E8E8','#D1E9D3','#096EF7','#974FF2','#3174C2','#E8E8E8','#E8E8E8'];
+	let w=babody.offsetWidth;
+	let now=0;
+	let next=0;
+	// console.log(cirli);
+	// 轮播
+	cirli[0].style.background=' #fff'
+	bali[0].style.left=0;
+	t=setInterval(move,1000);
+	banner.onmouseover=function(){
 		clearInterval(t);
 	}
-	box.onmouseleave=function(){
-		t=setInterval(run, 1000);
+	banner.onmouseout=function(){
+		t=setInterval(move,1000);
 	}
+	for(let i=0;i<cirli.length;i++){
+		cirli[i].onclick=function(){
+			if(now==i){
+				return;
+			}
+			bali[i].style.left=w+'px';
+			animate(bali[i],{left:0});
+			animate(bali[now],{left:-w});
+			cirli[now].style.background=' #a2a2a2';
+			cirli[i].style.background='#fff';
+			now=next=i;
+		}
+	}
+	function move(){
+		next++;
+		if(next==bali.length){
+			next=0;
+		}
+		banner.style.background=bancolor[next];
+		bali[next].style.left=w+'px';	
+		cirli[now].style.background=' #a2a2a2';
+		cirli[next].style.background='#fff';
+		animate(bali[next],{left:0});
+		animate(bali[now],{left:-w});
+		now=next;
+	}
+	
+	//按需加载
+	let floor=document.querySelectorAll('#floor');
+	let cbtns=document.querySelector('.choose');
+	let dingbu=document.querySelector('.dingbu');
+	let cbli=cbtns.querySelectorAll('li');
+	let fcolor=['red','orange','yellow','green','skyblue','#3174C2','#974FF2'];
+	let bro=innerHeight;
+	
+	let farr=[];
+	let fflag=1;
+	let sflag=1;
+	floor.forEach(element => {
+		farr.push(element.offsetTop);
+	})
 
+	window.onscroll=function(){
+		let scrolltop=document.body.scrollTop ||document.documentElement.scrollTop;
+		console.log(scrolltop)
+		if(scrolltop>=778){
+			if(sflag){
+				sflag=!sflag;
+				animate(dingbu,{top:0})
+				animate(cbtns,{left:0})
 
-
-	function run(){
-		n++;
-		if(n==blis.length){
-			n=0;
+			}	
+		
+		}
+		else{
+			if(!sflag){
+				sflag=!sflag;
+				animate(dingbu,{top:-50})
+				animate(cbtns,{left:-40})
+			}
+			
 		}
 		
-		for(let i=0;i<blis.length;i++){
-			blis[i].style.display='none';
-			circle[i].style.background='#a2a2a2';
-		}
-		blis[n].style.display='block';
-		circle[n].style.background='#fff';
+		farr.forEach((element,index) => {
+			if(!fflag){
+				return;
+			}
+			if(scrolltop+bro>=farr[index]){
+				for(let i=0;i<cbli.length;i++){
+					cbli[i].style.background='rgba(0, 0, 0, 0.4)';
+				}
+			cbli[index].style.background=fcolor[index];
+			let imgs=floor[index].getElementsByTagName('img');
+			for(let i=0;i<imgs.length;i++){
+				imgs[i].src=imgs[i].getAttribute('imgpath');
+			
+			}
+			}
+		})
 		
-	}
+		}
+		cbli.forEach((element,index) =>{
+			element.onclick=function(){
+				for(let i=0;i<cbli.length;i++){
+					cbli[i].style.background='rgba(0, 0, 0, 0.6)';
+				}
+				fflag=0;
+				cbli[index].style.background=fcolor[index];
+				animate(document.documentElement,{scrollTop:farr[index]},function(){
+					fflag=1;
+				});
+			}
+		})
 
-}
+		
+		//侧导航
+		let aside=document.querySelector('.aside');
+		let asli=aside.querySelectorAll('li');
+		let item=document.querySelectorAll('.item');
+		for(let i=0;i<asli.length;i++){
+			asli[i].onmouseover=function(){
+				item[i].style.display='block';
+			}
+			asli[i].onmouseout=function(){
+				item[i].style.display='none';
+			}
+		}
+
+		// 右边导航
+		let leftaside=document.querySelector('.leftaside');
+		let leli=leftaside.querySelectorAll('li');
+		
+		leli.forEach((element,index) =>{
+			if(index!=1 && index!=9){
+			let leitem=element.querySelector('.leitem');
+			element.onmouseover=function(){
+				leitem.style.display='block';
+				animate(leitem,{left:-80});
+			}
+			element.onmouseout=function(){
+				leitem.style.display='none';
+				animate(leitem,{left:-101});
+			}
+			}
+		})
+	
+		//头部
+		let 
+		hright=document.querySelector('.head-right');
+		hrli=hright.querySelectorAll('.head-right>li');
+		hrli.forEach(element =>{
+			let hliul=element.querySelector('ul');
+			element.onmouseover=function(){
+				if(hliul!=null){
+					hliul.style.display='block';
+				}
+			}
+			element.onmouseout=function(){
+				if(hliul!=null){
+					hliul.style.display='none';
+				}
+			}
+		})
+		console.log(hrli)
+
+	}	
+	
+
+
+
